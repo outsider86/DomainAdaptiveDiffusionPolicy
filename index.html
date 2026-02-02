@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Domain Adaptive Diffusion Policy can zero-shot generalize to domains with unseen dynamics at test time.">
+  <meta name="keywords" content="Domain Adaptation, Diffusion Policy, Meta-RL">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DADP: Domain Adaptive Diffusion Policy</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  
+  <!-- KaTeX for LaTeX rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      renderMathInElement(document.body, {
+        delimiters: [
+          {left: "$$", right: "$$", display: true},
+          {left: "$", right: "$", display: false},
+          {left: "\\[", right: "\\]", display: true},
+          {left: "\\(", right: "\\)", display: false}
+        ],
+        throwOnError: false
+      });
+    });
+  </script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DADP: Domain Adaptive Diffusion Policy</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Anonymous authors
+              </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"></sup>Under Review as a conference paper at ICML 2026</span>
+
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+
+        <!-- Walker Modalities -->
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/walker_modality_gif/1.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/walker_modality_gif/4.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/walker_modality_gif/7.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+
+        <!-- HalfCheetah Modalities -->
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/halfcheetah_modality_gif/1.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/halfcheetah_modality_gif/2.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/halfcheetah_modality_gif/3.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+
+
+        <!-- Ant Modalities -->
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/ant_modality_gif/2.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/ant_modality_gif/24.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/ant_modality_gif/80.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+
+
+
+        <!-- Hopper Modalities -->
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/hopper_modality_gif/0.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/hopper_modality_gif/12.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+        <div class="item item-steve">
+            <img src="./static/domain_modalities/hopper_modality_gif/27.gif"
+                  alt="Chair task trajectory prediction"
+                  style="width:100%; height:auto;" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+          Learning domain adaptive policies that can generalize to unseen transition dynamics, remains a fundamental challenge in learning-based control.
+          Substantial progress has been made through domain representation learning to capture domain-specific information, thus enabling domain-aware decision making.
+          We analyze the process of learning domain representations through dynamical prediction and find that selecting contexts adjacent to the current step causes the learned representations to entangle static domain information with varying dynamical properties.
+          Such mixture can confuse the conditioned policy, thereby constraining zero-shot adaptation.
+          </p>
+          <p>
+          To tackle the challenge, we propose DADP (Domain Adaptive Diffusion Policy), which achieves robust adaptation through unsupervised disentanglement and domain-aware diffusion injection.
+          First, we introduce Lagged Context Dynamical Prediction, a strategy that conditions future state estimation on a historical offset context; by increasing this temporal gap, we unsupervisedly disentangle static domain representations by filtering out transient properties.
+          Second, we integrate the learned domain representations directly into the generative process by biasing the prior distribution and reformulating the diffusion target.
+          Extensive experiments on challenging benchmarks across locomotion and manipulation demonstrate the superior performance, and the generalizability of DADP over prior methods. 
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+
+    <!-- Methods. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Methods</h2>
+
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Learn Representation by Extracting Static Info</h3>
+
+
+
+
+        <div class="content has-text-justified">
+          <p>
+            First, we identify an important issue during domain representation learning through dynamical prediction.
+            We find that selecting contexts adjacent to the current step causes the learned representations to entangle static domain information with varying dynamical properties.
+            Such mixture can confuse the conditioned policy, thereby constraining zero-shot adaptation.
+          </p>
+          <p>
+            To remove disentangle time-varying properties from the unsupervisedly learned representation, we introduce <b>Lagged Context Dynamical Prediction</b>. 
+            Specifically, we break the temporal correlation between the context and the current step by introducing a large historical offset $\Delta t \rightarrow \infty$ between the context and the current timestep, 
+            preventing time-varying information in the context from assisting dynamical prediction and thereby excluding it from the extracted representation during learning.
+          </p>
+
+          <p>
+            We also provide the t-SNE visualizations of the representations of Walker2d and HalfCheetah learned with different $\Delta t$ below.
+            As $\Delta t$ increases, the representations from different domains become gradually distinctly clustered.
+            Compared some previous methods based on contrastive learning, our approach can achieve great embedding qualities from a simple dynamical prediction objective without extra data generation process.
+
+
+        </div>
+        <div class="interpolation-panel">
+          <div class="columns is-vcentered">
+            <div class="column interpolation-video-column has-text-centered">
+              <div id="unsup-interpolation-image-wrapper">
+                Loading...
+              </div>
+              <p class="is-bold" style="font-size: 1.2em; font-weight: bold;">Unsupervised Representation</p>
+            </div>
+            
+            <div class="column is-6 has-text-centered">
+              <img src="./static/representation/walker/subplots/factor.png"
+                   class="interpolation-image"
+                   alt="Interpolation end reference image."/>
+                   
+              <p class="is-bold" style="font-size: 1.2em; font-weight: bold;">Supervised Representation</p>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-12" style="padding-top:0.25rem;">
+              <div style="display:flex; flex-direction:column; align-items:center;">
+                <input class="slider is-fullwidth is-large is-info"
+                       id="unsup-interpolation-slider"
+                       data-folder="walker"
+                       step="1" min="0" max="0" value="0" type="range">
+                <div id="unsup-interpolation-value" style="margin-top:0.5rem; text-align:center; font-weight:500;">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="interpolation-panel">
+          <div class="columns is-vcentered">
+            <div class="column interpolation-video-column has-text-centered">
+              <div id="hc-interpolation-image-wrapper">
+                Loading...
+              </div>
+              <p class="is-bold" style="font-size: 1.2em; font-weight: bold;">Unsupervised Representation</p>
+            </div>
+            
+            <div class="column is-6 has-text-centered">
+              <img src="./static/representation/hc/subplots/factor.png"
+                   class="interpolation-image"
+                   alt="Interpolation end reference image."/>
+                   
+              <p class="is-bold" style="font-size: 1.2em; font-weight: bold;">Supervised Representation</p>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column is-12" style="padding-top:0.25rem;">
+              <div style="display:flex; flex-direction:column; align-items:center;">
+                <input class="slider is-fullwidth is-large is-info"
+                       id="hc-interpolation-slider"
+                       data-folder="hc"
+                       step="1" min="0" max="0" value="0" type="range">
+                <div id="hc-interpolation-value" style="margin-top:0.5rem; text-align:center; font-weight:500;">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br/>
+        <!--/ Interpolating. -->
+        <div class="content has-text-justified">
+          <p>
+            We also provide quantitative results of the learned representations. 
+            As $\Delta t$ increases, both representation qualitymetrics consistently improve, eventually becoming comparable to those of supervised representations,
+            which is trained with access to ground-truth labels
+          </p>
+        </div>
+
+        <div class="content has-text-centered">
+          <img src="./static/representation/table.png"
+              style="max-width: 90%; height: auto;"
+              alt="Denoise Intuition"/>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        <!-- Re-rendering. -->
+        <h3 class="title is-4">Utilize Representation by Diffusion Modulation</h3>
+        <div class="content has-text-justified">
+          <p>
+            Second, we inject the learned representations directly into the generative process. 
+            Specifically, we start denoising with a representation-biased mixed guassian distribution, and reformulate the diffusion target to include the learned representation.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/diffusion/DenoiseIntuition.png"
+              style="max-width: 90%; height: auto;"
+              alt="Denoise Intuition"/>
+        </div>
+        <!--/ Re-rendering. -->
+
+      </div>
+    </div>
+    <!--/ Methods. -->
+
+
+
+
+
+
+
+
+
+
+
+    
+    <!-- Experiments. -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-4">Policy Rollouts</h2>
+        <div class="content has-text-justified">
+          <p>
+            We visualize the trajectories generated by different policies on a specific domain in the Walker2d with its corresponding embeddings. 
+            The green and gray area indicates the target and other domain embedding distribution present in the dataset.
+          </p>
+
+          <p>
+            As shown in the videos below, the Conditional Policy often fails to generate stable rollouts, as it cannot effectively utilize the domain representation to locate the target domain.
+            The MixedDDIM Policy shows improved stability with better locating capability but still struggles to maintain consistent performance throughout the rollout.
+            Contrarily, our DADP Policy consistently generates stable and effective behaviours, demonstrating its superior ability to leverage the learned domain representations for robust domain-aware decision-making.
+          </p>
+
+        <!-- Conditional Policy Rollouts Video -->
+        <h3 class="title is-4" style="color: #FF9201;">Conditional Policy Rollouts</h3>
+        <div class="content has-text-centered">
+          <img src="./static/embedding_rollouts/condition/condition_outputs.gif"
+               style="max-width: 90%; height: auto;"
+               alt="Conditional Policy Rollouts"/>
+        </div>
+        <br/>
+        
+        <!-- MixedDDIM Policy Rollouts Video -->
+        <h3 class="title is-4" style="color: #023D5A;">MixedDDIM Policy Rollouts</h3>
+        <div class="content has-text-centered">
+          <img src="./static/embedding_rollouts/mixedddim/mixedddim_outputs.gif"
+               style="max-width: 90%; height: auto;"
+               alt="MixedDDIM Policy Rollouts"/>
+        </div>
+        <br/>
+
+        <!-- DADP Policy Rollouts Video -->
+        <h3 class="title is-4" style="color: #FF0000;">DADP Policy Rollouts (Ours)</h3>
+        <div class="content has-text-centered">
+          <img src="./static/embedding_rollouts/dadp/dadp_outputs.gif"
+               style="max-width: 90%; height: auto;"
+               alt="DADP Policy Rollouts"/>
+        </div>
+        <br/>
+
+        <!--/ MixedDDIM Video -->
+
+
+
+
+
+        <h2 class="title is-3">Experiments</h2>
+        <div class="content has-text-justified">
+          <p>
+            We compared DADP with prior methods and different variants on multiple challenging benchmarks across locomotion and manipulation, achieving superior performance and generalizability across nearly all tasks.
+          </p>
+
+
+        <!-- Interpolating. -->
+        <h3 class="title is-4">Main Results</h3>
+        <div class="content has-text-centered">
+          <img src="./static/diffusion/table.png"
+              style="max-width: 90%; height: auto;"
+              alt="Denoise Intuition"/>
+        </div>
+        <br/>
+        <!--/ Interpolating. -->
+
+        <!-- Re-rendering. -->
+        <h3 class="title is-4">Ablation Results</h3>
+        <div class="content has-text-justified">
+          <p>
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <img src="./static/diffusion/ablation.png"
+              style="max-width: 90%; height: auto;"
+              alt="Denoise Intuition"/>
+        </div>
+        <!--/ Re-rendering. -->
+
+      </div>
+
+
+    </div>
+    <!--/ Experiments. -->
+
+
+
+  </div>
+</section>
+
+
+</body>
+</html>

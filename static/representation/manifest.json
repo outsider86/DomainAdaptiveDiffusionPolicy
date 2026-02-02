@@ -1,0 +1,34 @@
+{
+  "walker": {
+    "images": [
+      "walker_embedding_embeddings_data_t=1_ud.png",
+      "walker_embedding_embeddings_data_t=4_ud.png",
+      "walker_embedding_embeddings_data_t=16_ud.png",
+      "walker_embedding_embeddings_data_t=32_ud.png",
+      "walker_embedding_embeddings_data_t=inf_ud.png"
+    ],
+    "labels": [
+      "Historically Offset $\\Delta t$ =1 in Walker2d",
+      "Historically Offset $\\Delta t$ =4 in Walker2d",
+      "Historically Offset $\\Delta t$ =16 in Walker2d",
+      "Historically Offset $\\Delta t$ =32 in Walker2d",
+      "Historically Offset $\\Delta t$ =∞ in Walker2d"
+    ]
+  },
+  "hc": {
+    "images": [
+    "hc_embedding_embeddings_data_t=1_ud.png",
+    "hc_embedding_embeddings_data_t=4_ud.png",
+    "hc_embedding_embeddings_data_t=16_ud.png",
+    "hc_embedding_embeddings_data_t=32_ud.png",
+    "hc_embedding_embeddings_data_t=inf_ud.png"
+    ],
+    "labels": [
+      "Historically Offset $\\Delta t$ =1 in HalfCheetah",
+      "Historically Offset $\\Delta t$ =4 in HalfCheetah",
+      "Historically Offset $\\Delta t$ =16 in HalfCheetah",
+      "Historically Offset $\\Delta t$ =32 in HalfCheetah",
+      "Historically Offset $\\Delta t$ =∞ in HalfCheetah"
+    ]
+  }
+}
